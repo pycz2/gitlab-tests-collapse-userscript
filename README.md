@@ -3,7 +3,7 @@
 A Tampermonkey userscript for GitLab merge request pages. It adds:
 
 - a **Collapse tests** toggle button in the sticky MR header, shown only on the "Changes" tab. Pressed: all test files are marked "Viewed" and collapsed. Released: "Viewed" is removed and the files expand again;
-- a **review progress bar** next to the button, also in the sticky header. The left part is code (blue), the right part is tests (purple); their widths are proportional to the changed lines. Each part fills as you mark its files "Viewed" and glows when it is fully reviewed. When everything is viewed, the bar turns green and a ✓ appears. Hover a part to see the exact numbers;
+- a **review progress bar** in the sticky header, left of all buttons. The left part is code (blue, `</>` icon), the right part is tests (amber, flask icon); their widths are proportional to the changed lines. The icon sits on a knob that rides on the fill edge. Each part fills as you mark its files "Viewed", shows its percentage, and glows when it is fully reviewed. When everything is viewed, the bar turns green and a ✓ appears. Hover a part to see the exact numbers;
 - two counters next to the total file/line counter:
   - **w/o tests: N files +X −Y** — the changes without tests;
   - **to review: N files +X −Y** — the files that are not marked "Viewed" yet. It updates when you mark or unmark a file.
