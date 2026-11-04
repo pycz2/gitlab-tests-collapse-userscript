@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         GitLab: collapse tests
 // @namespace    https://github.com/pycz2/gitlab-tests-collapse-userscript
-// @version      2.0.0
+// @version      2.0.1
 // @description  MR page: toggle button that marks all tests/**/test*.py files as viewed (collapsed) or unviewed (expanded), plus file/line stats without tests.
 // @match        https://gitlab.com/*/-/merge_requests/*
 // @grant        none
+// @updateURL    https://raw.githubusercontent.com/pycz2/gitlab-tests-collapse-userscript/main/gitlab-collapse-tests.user.js
+// @downloadURL  https://raw.githubusercontent.com/pycz2/gitlab-tests-collapse-userscript/main/gitlab-collapse-tests.user.js
 // ==/UserScript==
 
 (() => {
