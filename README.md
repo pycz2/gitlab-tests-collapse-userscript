@@ -1,22 +1,22 @@
 # GitLab: collapse tests
 
-Userscript для Tampermonkey. На странице merge request в GitLab он добавляет:
+A Tampermonkey userscript for GitLab merge request pages. It adds:
 
-- кнопку **Collapse tests** рядом с «Your review». Нажата — все тестовые файлы отмечены «Viewed» и свёрнуты. Отжата — «Viewed» снят, файлы развёрнуты;
-- счётчик **w/o tests: N files +X −Y** рядом с общим счётчиком файлов и строк — изменения без тестов.
+- a **Collapse tests** toggle button next to "Your review". Pressed: all test files are marked "Viewed" and collapsed. Released: "Viewed" is removed and the files expand again;
+- a **w/o tests: N files +X −Y** counter next to the total file/line counter, showing the changes without tests.
 
-Тестовый файл — это `test*.py` в папке `tests/` на любом уровне вложенности (`tests/unit/test_foo.py`). `tests/conftest.py` и хелперы тестами не считаются. Правило задаёт константа `TEST_FILE` в начале скрипта.
+A test file is any `test*.py` inside a `tests/` directory at any depth (`tests/unit/test_foo.py`). `tests/conftest.py` and other helpers do not count as tests. The rule is the `TEST_FILE` constant at the top of the script.
 
-Работает в обоих видах diffs: Rapid Diffs и классическом.
+Works in both diff views: Rapid Diffs and the classic view.
 
-## Установка
+## Install
 
-1. Поставьте [Tampermonkey](https://www.tampermonkey.net/) в браузер.
-2. Откройте [gitlab-collapse-tests.user.js](https://raw.githubusercontent.com/pycz2/gitlab-tests-collapse-userscript/main/gitlab-collapse-tests.user.js) и нажмите «Install».
+1. Install [Tampermonkey](https://www.tampermonkey.net/) in your browser.
+2. Open [gitlab-collapse-tests.user.js](https://raw.githubusercontent.com/pycz2/gitlab-tests-collapse-userscript/main/gitlab-collapse-tests.user.js) and click "Install".
 
-Tampermonkey сам проверяет обновления по `@updateURL`. Чтобы обновление дошло, поднимайте `@version` при каждом изменении.
+Tampermonkey checks for updates via `@updateURL`. Bump `@version` on every change, otherwise the update is not picked up.
 
-## Ограничения
+## Limitations
 
-- `@match` настроен только на `gitlab.com`. Для self-hosted GitLab добавьте свою строку `@match`.
-- Классический вид использует внутренние Pinia store GitLab (`legacyDiffs`, `codeReview`). Если GitLab их переименует, эта часть сломается.
+- `@match` covers `gitlab.com` only. For a self-hosted GitLab, add your own `@match` line.
+- The classic view relies on GitLab's internal Pinia stores (`legacyDiffs`, `codeReview`). If GitLab renames them, that part breaks.
