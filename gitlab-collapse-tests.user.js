@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitLab: collapse tests
 // @namespace    https://github.com/pycz2/gitlab-tests-collapse-userscript
-// @version      2.0.1
+// @version      2.1.0
 // @description  MR page: toggle button that marks all tests/**/test*.py files as viewed (collapsed) or unviewed (expanded), plus file/line stats without tests.
 // @match        https://gitlab.com/*/-/merge_requests/*
 // @grant        none
@@ -32,7 +32,7 @@
         added: num(el.querySelector('.rd-stats-added')),
         removed: num(el.querySelector('.rd-stats-removed')),
         canView: Boolean(box && !box.disabled),
-        viewed: () => box.checked,
+        viewed: () => Boolean(box?.checked),
         set: () => box.click(),
       };
     });
@@ -82,17 +82,19 @@
     if (!stats) {
       stats = document.createElement('div');
       stats.id = STATS_ID;
-      stats.className = 'gl-flex gl-items-center gl-gap-2 gl-ml-4 gl-font-bold';
-      stats.title = `Files not matching ${TEST_FILE}`;
+      stats.className = 'gl-flex gl-items-center gl-gap-4 gl-ml-4 gl-font-bold';
       total.after(stats);
     }
-    const code = files.filter((f) => !TEST_FILE.test(f.path));
-    const added = code.reduce((s, f) => s + f.added, 0);
-    const removed = code.reduce((s, f) => s + f.removed, 0);
-    stats.innerHTML =
-      `<span class="gl-text-subtle">w/o tests: ${code.length} files</span>` +
-      `<span class="gl-text-success">+${added}</span>` +
-      `<span class="gl-text-danger">−${removed}</span>`;
+    const group = (label, title, list) =>
+      `<span class="gl-flex gl-items-center gl-gap-2" title="${title}">` +
+      `<span class="gl-text-subtle">${label}: ${list.length} files</span>` +
+      `<span class="gl-text-success">+${list.reduce((s, f) => s + f.added, 0)}</span>` +
+      `<span class="gl-text-danger">−${list.reduce((s, f) => s + f.removed, 0)}</span></span>`;
+    const html =
+      group('w/o tests', `Files not matching ${TEST_FILE}`, files.filter((f) => !TEST_FILE.test(f.path))) +
+      group('to review', 'Files not marked as viewed', files.filter((f) => !f.viewed()));
+    // Rewrite only on change, so the tooltip does not flicker every second.
+    if (stats.dataset.html !== html) stats.innerHTML = stats.dataset.html = html;
   };
 
   const tick = () => {
@@ -117,6 +119,8 @@
       });
       review.before(btn);
     }
+    // Tabs switch without a page reload, so show the button only while "Changes" is active.
+    btn.style.display = document.querySelector('.merge-request-tabs .diffs-tab.active') ? '' : 'none';
     renderButton(btn, testsOf(files));
   };
 
